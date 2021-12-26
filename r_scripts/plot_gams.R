@@ -84,7 +84,7 @@ plot_fc <-  ggplot(data=df, aes(x=foxbaits, y=fit, col=region)) +
     scale_color_manual(values = c("#440154FF", "#20A387FF"), labels = c("Glenelg", "Otway"), name = "Region") +   
     geom_rug(sides="t", data = filter(data, region == "glenelg"), aes(x = foxbaits), length = unit(0.04, "npc"), size = 0.2, col = "#440154FF", alpha = 0.8, inherit.aes = FALSE) +
     geom_rug(sides="b", data = filter(data, region == "otways"), aes(x = foxbaits),  length = unit(0.04, "npc"), size = 0.2, col = "#20A387FF", alpha = 0.8, inherit.aes = FALSE) +
-    labs(title = "Fox control", x = bquote('1080 poison ' (baits ~km^-2)), y = "Pr(occupancy)") + 
+    labs(title = "Fox control", x = bquote('1080 poison ' (baits ~km^-2)), y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10),
           legend.position = "bottom",
@@ -119,7 +119,7 @@ func_tsf_gs <- function(gam_model, data, min, max){
     geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) +
     geom_rug(sides="t", data = filter(data, region == "glenelg"), aes(x = tsf), length = unit(0.04, "npc"), size = 0.2, col = "#440154FF", alpha = 0.8, inherit.aes = FALSE) +
     geom_rug(sides="b", data = filter(data, region == "otways"), aes(x = tsf),  length = unit(0.04, "npc"), size = 0.2, col = "#20A387FF", alpha = 0.8, inherit.aes = FALSE) +
-    labs(title = "Time since fire: average", x = "Years", y = "Pr(occupancy)") + 
+    labs(title = "Time since fire: average", x = "Years", y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10),
           plot.margin = unit(c(0,0,0,0), "in"))
@@ -229,7 +229,7 @@ func_foxbaits <- function(gam_model, data, min, max){
     scale_color_manual(values = c("#440154FF", "#20A387FF"), labels = c("Glenelg", "Otway"), name = "Region") +   
     geom_rug(sides="t", data = filter(data, region == "glenelg"), aes(x = foxbaits), length = unit(0.04, "npc"), size = 0.2, col = "#440154FF", alpha = 0.8, inherit.aes = FALSE) +
     geom_rug(sides="b", data = filter(data, region == "otways"), aes(x = foxbaits),  length = unit(0.04, "npc"), size = 0.2, col = "#20A387FF", alpha = 0.8, inherit.aes = FALSE) +
-    labs(title = "Fox control", x = bquote('1080 poison ' (baits ~km^-2)), y = "Pr(occupancy)") + 
+    labs(title = "Fox control", x = bquote('1080 poison ' (baits ~km^-2)), y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10),
           legend.position = "none",
@@ -291,7 +291,7 @@ func_ruggedness <- function(gam_model, data, min, max){
     geom_ribbon(aes(ymin=lower, ymax=upper), alpha=0.2) +
     geom_rug(sides="t", data = filter(data, region == "glenelg"), aes(x = ruggedness), length = unit(0.04, "npc"), size = 0.2, col = "#440154FF", alpha = 0.8, inherit.aes = FALSE) +
     geom_rug(sides="b", data = filter(data, region == "otways"), aes(x = ruggedness),  length = unit(0.04, "npc"), size = 0.2, col = "#20A387FF", alpha = 0.8, inherit.aes = FALSE) +
-    labs(title = "Terrain ruggedness", x = "Index", y = "Pr(occupancy)") + 
+    labs(title = "Terrain ruggedness", x = "Index", y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10),
           plot.margin = unit(c(0,0,0,0), "in"))
@@ -408,7 +408,7 @@ func_region <- function(gam_model, data, min, max){
     geom_errorbar(aes(x=region, ymin=lower, ymax=upper), size = 0.5, width = 0.2) +
     scale_fill_manual(values = c("#440154FF", "#20A387FF"), labels = c("Glenelg", "Otway"), name = "Region") +
     scale_color_manual(values = c("#440154FF", "#20A387FF"), labels = c("Glenelg", "Otway"), name = "Region") +   
-    labs(title = "Region", x = "", y = "Pr(occupancy)") + 
+    labs(title = "Region", x = "", y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10),
           legend.position = "none",
@@ -418,15 +418,15 @@ func_region <- function(gam_model, data, min, max){
 
 # A) FOX PLOTS ------------------------------------------------------------
 # run the functions
-a <- func_region(gam_fox_06, records, 0, 0.9)
-b <- func_foxbaits(gam_fox_06, records, 0, 0.9)
-c <- func_rain(gam_fox_06, records, rainfall_months = "rain_diff_percent_06months", month = "24", 0, 0.9)
-d <- func_elevation(gam_fox_06, records, 0, 0.9)
-e <- func_ruggedness(gam_fox_06, records, 0, 0.9)
-f <- func_twi(gam_fox_06, records, 0, 0.9)
-g <- func_dist_nnv(gam_fox_06, records, 0, 0.9)
-h <- func_tsf_gs(gam_fox_06, records, 0, 0.9)
-i <- func_tsf_veg(gam_fox_06, records, 0, 0.9)
+a <- func_region(gam_fox_06, records, 0, 0.78)
+b <- func_foxbaits(gam_fox_06, records, 0, 0.78)
+c <- func_rain(gam_fox_06, records, rainfall_months = "rain_diff_percent_06months", month = "24", 0, 0.78)
+d <- func_elevation(gam_fox_06, records, 0, 0.78)
+e <- func_ruggedness(gam_fox_06, records, 0, 0.78)
+f <- func_twi(gam_fox_06, records, 0, 0.78)
+g <- func_dist_nnv(gam_fox_06, records, 0, 0.78)
+h <- func_tsf_gs(gam_fox_06, records, 0, 0.78)
+i <- func_tsf_veg(gam_fox_06, records, 0, 0.78)
 
 # assemble / save
 png("figs/gams_fox.png", width = 8, height = 8.5, res = 600, units = "in")

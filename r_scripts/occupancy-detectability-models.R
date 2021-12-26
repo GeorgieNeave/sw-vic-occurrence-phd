@@ -50,12 +50,6 @@ records$region_bait01 <- paste0(records$region, "_", records$bait01)
 # make camdata file (records contain all detections of species / people-set-ups / falsetriggers)
 camdata <- distinct(records, station_year, .keep_all = TRUE)
 
-## Adjust site random effect
-## we need a random intercet for site to account for repeat sampling
-## but 425 cam-traps in the Glenelg region deployed by Matt were only surveyed once (4 dense grids (~500 m spacing) in 4 forest blocks) - we can save 421 model parameters by renaming these with just the forest block
-records$station <- if_else(records$data_source == "matt" & records$region == "glenelg", as.character(records$block), as.character(records$station))
-camdata$station <- if_else(camdata$data_source == "matt" & camdata$region == "glenelg", as.character(camdata$block), as.character(camdata$station))
-
 
 # drop and transform variables
 camdata <- transmute(camdata,

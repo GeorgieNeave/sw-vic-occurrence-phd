@@ -1,3 +1,11 @@
+library(ggplot2)
+library(patchwork)
+
+# Set the default theme for ggplot objects 
+theme_set(theme_bw())
+theme_update(panel.grid = element_blank())
+
+
 # PLOT: TSF X VEG --------------------------------------------------------
 gam_plot_tsf <- function(gam_model, data, title){
   # get model smooths
@@ -34,7 +42,7 @@ gam_plot_tsf <- function(gam_model, data, title){
     geom_rug(sides="b", data = filter(data, region == "otways"), aes(x = tsf),  length = unit(0.05, "npc"), size = 0.2, col = "#20A387FF", alpha = 0.8, inherit.aes = FALSE) +
     scale_color_manual(values = c("Glenelg" = "#440154FF", "Otway" = "#20A387FF"), name = "Region") +   
     scale_fill_manual(values = c("Glenelg" = "#440154FF", "Otway" = "#20A387FF"), name = "Region") +   
-    labs(title = title, x = "Time since fire (years)", y = "Pr(occupancy)") + 
+    labs(title = title, x = "Time since fire (years)", y = "Pr(occurrence)") + 
     theme(plot.title = element_text(size=11),
           axis.title = element_text(size = 10))
   plot_veg 
