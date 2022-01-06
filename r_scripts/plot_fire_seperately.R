@@ -61,7 +61,6 @@ tsf_plot
 dev.off()
 
 
-
 # RAW DATA: TSF X VEG  -------------------------------------
 
 # rename treatment variable

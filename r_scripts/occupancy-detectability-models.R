@@ -93,10 +93,10 @@ saveRDS(fit_occu_cat, "derived_data/fit_occu_cat.RData")
 saveRDS(fit_occu_sbb, "derived_data/fit_occu_sbb.RData")
 saveRDS(fit_occu_lnp, "derived_data/fit_occu_lnp.RData")
 
-fit_occu_fox <- readRDS("derived_data/fit_occu_fox.RData")
-fit_occu_cat <- readRDS("derived_data/fit_occu_cat.RData")
-fit_occu_sbb <- readRDS("derived_data/fit_occu_sbb.RData")
-fit_occu_lnp <- readRDS("derived_data/fit_occu_lnp.RData")
+fit_occu_fox <- readRDS("/Users/mrees2/Dropbox/personal/matt/github/unlinked/occurrence-gams-fox-cat-sbb-lnp/derived_data/fit_occu_fox.RData")
+fit_occu_cat <- readRDS("/Users/mrees2/Dropbox/personal/matt/github/unlinked/occurrence-gams-fox-cat-sbb-lnp/derived_data/fit_occu_cat.RData")
+fit_occu_sbb <- readRDS("/Users/mrees2/Dropbox/personal/matt/github/unlinked/occurrence-gams-fox-cat-sbb-lnp/derived_data/fit_occu_sbb.RData")
+fit_occu_lnp <- readRDS("/Users/mrees2/Dropbox/personal/matt/github/unlinked/occurrence-gams-fox-cat-sbb-lnp/derived_data/fit_occu_lnp.RData")
 
 # plot veg effects
 plot_marginal(fit_occu_fox, "state") 
