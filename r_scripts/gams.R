@@ -191,5 +191,55 @@ concurvity(gam_sbb_06, full = FALSE)
 concurvity(gam_lnp_12, full = FALSE)
 
 
+# CHECK MODEL FITS AGAINST A NULL MODEL -----------------------------------
+# how much are the random effects for site contributing to model fits?
+# Function to run the null model 
+gam_function_null <- function(species, data) {
+  # rename column to species of interest
+  data_renamed <- rename(data, species = species)
+  # run GAM
+  gam_model <- bam(species ~ s(station, bs = "re") +  
+                     offset(log(survey_duration)), 
+                   data = data_renamed, family = binomial, nthreads = 3, discrete = TRUE, select = TRUE)
+  # save model
+  return(gam_model)
+}
+
+# fit null
+gam_fox_null <- gam_function_null(species = "fox", data = records)
+gam_cat_null <- gam_function_null(species = "cat", data = records)
+gam_sbb_null <- gam_function_null(species = "bandicoot_sb", data = records)
+gam_lnp_null <- gam_function_null(species = "potoroo_ln", data = records)
+
+
+# Model summary table -----------------------------------------------------
+extract_fits <- function(model, species, model_name){
+  x <- summary(model)
+  df <- expand.grid(species = species,
+                    model = model_name,
+                    edf = sum(x$edf),
+                    dev.expl = x$dev.expl,
+                    r.sq = x$r.sq)
+  return(df)
+}
+
+summaries <- bind_rows(extract_fits(gam_fox_null, "fox", "null"),
+                       extract_fits(gam_cat_null, "cat", "null"),
+                       extract_fits(gam_sbb_null, "sbb", "null"),
+                       extract_fits(gam_lnp_null, "lnp", "null"),
+                       extract_fits(gam_fox_06, "fox", "full"),
+                       extract_fits(gam_cat_06, "cat", "full"),
+                       extract_fits(gam_sbb_06, "sbb", "full"),
+                       extract_fits(gam_lnp_12, "lnp", "full")) %>%
+  arrange(species)
+
+# add AIC scores
+aic_vals <- AIC(gam_fox_null, gam_fox_06, gam_cat_null, gam_cat_06, gam_sbb_null, gam_sbb_06, gam_lnp_null, gam_lnp_12)
+summaries <- cbind(summaries, aic_vals[2])
+
+# save
+write.csv(summaries, "derived_data/model_summaries.csv")
+
+
 # --> plot scripts
 # END

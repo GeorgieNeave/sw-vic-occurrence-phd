@@ -1,0 +1,471 @@
+---
+title: "Lethal fox control and fire influence the occurrence of invasive predators and threatened native prey"
+author:
+  - name: Matthew W. Rees
+    email: matt.wayne.rees@gmail.com
+    affiliation: UOM
+    footnote: 1
+  - name: Jack H. Pascoe
+    email: 
+    affiliation: CEC
+  - name: Mark Le Pla
+    email: 
+    affiliation: CEC
+  - name: Alan Robley
+    email: 
+    affiliation: ARI
+  - name: Emma K. Birnbaum
+    email: 
+    affiliation: CEC
+  - name: Brendan A. Wintle
+    email: 
+    affiliation: UOM
+  - name: Bronwyn A. Hradsky
+    email: 
+    affiliation: UOM
+    footnote: 
+address:
+  - code: UOM
+    address: Quantitative & Applied Ecology Group, School of Ecosystem and Forest Science, The University of Melbourne, Parkville, VIC, Australia
+  - code: CEC 
+    address: Conservation Ecology Centre, Otway Lighthouse Rd, Cape Otway, VIC, Australia
+  - code: ARI 
+    address: Department of Environment, Land, Water and Planning, Arthur Rylah Institute for Environmental Research, Heidelberg, Australia
+footnote:
+  - code: 1
+    text: "Corresponding Author"
+abstract: 
+keywords: "feral cat; diel activity patterns; generalised additive model; invasive predator;  intraguild predator interactions; mesopredator release; red fox; lethal predator control"
+journal: "?"
+date: "`r Sys.Date()`"
+bibliography: /Users/mrees2/Dropbox/personal/matt/github/phd-thesis/index/bib/thesis.bib
+header-includes:
+    - \usepackage{setspace}\doublespacing
+    - \usepackage{float}
+    - \floatplacement{figure}{H}
+    - \newcommand{\beginsupplement}{\setcounter{table}{0}  \renewcommand{\thetable}{S\arabic{table}} \setcounter{figure}{0} \renewcommand{\thefigure}{S\arabic{figure}} \setcounter{section}{0} \renewcommand{\thesection}{S\arabic{section}}}
+    - \usepackage{lineno}
+linenumbers: false
+csl: journal-of-applied-ecology.csl
+geometry: margin=1.1in
+fontsize: 12pt
+output:
+  bookdown::pdf_book:
+    base_format: rticles::elsevier_article
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  echo      = FALSE,
+  warning   = FALSE,
+  message   = FALSE,
+  error     = FALSE,
+  cache     = FALSE,
+  fig.path  = "../figs/",
+  fig.align = "center",
+  out.width = "80%")
+
+library(kableExtra)
+library(dplyr)
+library(readr)
+
+```
+
+\parskip=12pt 
+
+*Article type*: Research Article 
+
+*Running title*: XX
+
+*Word count (abstract, body)*: XX, XX
+
+*References*: ?
+
+*Figures*: 5 
+
+*Tables*: 0 
+
+*Authorship*:   
+
+*Data accessibility*:   Data and code will be deposited on the Dryad Digital Repository after acceptance and can be viewed here: [https://github.com/matt-w-rees/sw-vic-occurrence-phd](https://github.com/matt-w-rees/sw-vic-occurrence-phd).
+
+
+\newpage
+
+\linenumbers
+
+
+ABSTRACT {-}
+========
+
+Invasive predators and altered fire regimes are key, often overlapping biodiversity threats. Disentangling the impacts of multiple threats and management actions is challenging, particularly when species occur patchily across heterogeneous landscapes. 
+
+Here we assessed the effects of lethal control of an introduced apex predator, the red fox *Vulpes vulpes*, on mammal communities in fire-prone and fragmented forests of south-eastern Australia. Our study synthesised data from multiple smaller-scale studies that used a combination of experimental and space-for-time approaches to monitor the effects of fox control and time since fire on mammals, giving a total of 3667 camera-traps deployments across 1232 sites (172,052 trap nights). We used occupancy-detection models to investigate species detectability, and generalised additive models to explore potentially nonlinear effects of multiple drivers and management actions on the distribution of two invasive mammalian predators and two threatened native prey species.
+
+In one region with frequent, long-term (8 - 14 years) targeted poison-baiting of foxes, foxes were heavily suppressed in terms of both detectability and occupancy. There was some evidence feral cat *Felis catus* occupancy was slightly higher in landscapes with fox control, potentially signalling mesopredator release. Among the threatened native prey species, occupancy rates of long-nosed potoroos *Potorous tridactylus* were higher in landscapes with fox control, but there was little difference in southern brown bandicoot *Isoodon obesulus* occupancy. In another region where fox control recently commenced (0 - 2 years), foxes were suppressed to a lesser extent, and no impacts were detected on subordinate predator or prey species. Fire history impacted the occurrence of each study species; however, invasive predators responded differently to time since fire (0 - 80 years) across each vegetation type.
+
+Predator control and prescribed fire are important and widely used management tools. The conservation benefits of introduced depend on the intensity and duration of management, and optimal fire regimes differ between species and vegetation types. 
+
+
+\newpage
+
+INTRODUCTION
+==========================
+
+Accurate and precise estimates of the effects of management are essential to inform conservation decision-making, ensure cost-effective allocation of resources and identify potential unintended consequences of interventions [@christie2020poor]. However, reliable inference about the effects of landscape-scale management, including identifying the cause of nil or perverse outcomes, is often difficult to achieve because target populations fluctuate naturally and are often subject to multiple co-occurring threats and management actions [@pressey2007conservation; @sugihara2012detecting]. Separating management effects from other drivers is particularly difficult for species that occur patchily across broad distributions [@tulloch2016using]. 
+
+Invasive predator management is a classic example of these challenges. Predators can have devastating impacts on native biodiversity when introduced beyond their native range, and so invasive predators are often actively controlled using lethal methods [@bellard2016global; @doherty2016invasive; @sih2010predator]. Quantifying the degree of invasive predator suppression, the responses of their native prey and any unintended outcomes across gradients of predator control is key to designing effective, cost-efficient management programs [@walsh2012unexpected; @baxter2008cost; @cattarino2016accounting]. However, the ability of associated monitoring programs to detect these signals is often limited by confounding from co-occurring threats, management actions and natural drivers. This is concerning because, in many cases, few or negative effects on native biodiversity are observed following invasive predator control, particularly when multiple introduced species are present [@ballari2016potential].
+
+There are several explanations for why native prey species may not benefit from invasive predator control. Firstly, control efforts may not sufficiently reduce the density of invasive predators—predators can be remarkably resilient to low-effort culling [@sabo2005stochasticity; @sinclair1998predicting; @moseby2019understanding; @lazenby2015effects]. Secondly, invasive predator suppression may lead to a 'release' of a subordinate predator [@crooks1999mesopredator; @courchamp1999cats] or competitor species [@ruscoe2011unexpected], which could potentially worsen net outcomes for the native species [e.g., @rayner2007spatial]. Thirdly, predation by introduced species may not be the primary limit on native prey populations [@banks1999predation]. Hence, quantifying the degree of apex predator suppression and testing the mesopredator release hypothesis [@prugh2009rise], are important steps toward understanding prey responses to lethal predator control and identifying the cause of a nil response, if observed. 
+
+Quantifying the impacts of planned fire on fauna is similarly complex. Fire can drive the persistence and abundance of fauna populations, primarily through its effects of vegetation structure [@monamy2000small]. As these effects persist for decades or centuries, are nonlinear, and vary across environmental conditions [@haslem2011habitat], fauna species’  responses to fire often vary across heterogeneous landscapes [@swan2015predicting; @nimmo2014why]. Predicting the long-term ramifications of fire for predators and prey is a key challenge for managers who are tasked with stemming the decline of native fauna populations while simultaneously managing fuel loads to protect against the increasing threat of large wildfires [@clarke2008catering; @hradsky2020conserving].
+
+These separate challenges are amplified in contexts where invasive predators occur in fire-prone landscapes [@doherty2015multiple]. Nonetheless, disentangling the complex and potentially interacting effects of invasive predator and fire management on threatened native fauna is crucial for effective native mammal conservation in Australia, which has experienced some of the worst biodiversity declines in recent world history [@woinarski2019reading; @waldron2017reductions]. Predation by introduced species and altered fire regimes are primary drivers of these declines [@woinarski2015ongoing], but other threatening processes such as habitat fragmentation, and natural drivers such vegetation type and rainfall dynamics also play an important role in shaping contemporary native mammal distributions [@may1996influence; @hale2016fire]. Lethal red fox *Vulpes vulpes* (hereafter ‘fox’) control and prescribed burning (primarily for asset protection) are among the most common management actions in protected areas, however, we have a poor understanding of their effects on native fauna [@lindenmayer2018conservation; @mcleod2008control; @clarke2008catering; @hradsky2020conserving; @braysher2017managing]. This is partly because there is strong spatial overlap of these threats and management actions [@evans2011spatial] and potential unintended consequences often go unmeasured. 
+
+In this study, we assessed the effect of landscape-scale lethal fox management in two protected, fire-prone conservation regions of south-eastern Australia: the Glenelg region and Otway Ranges. We quantified the effects of fox management on foxes (the managed species), feral cats *Felis catus* (hereafter ‘cat’; unmanaged competitor), and two threatened species that are the primary focus of the conservation programs: the southern brown bandicoot *Isoodon obesulus* (hereafter 'SBB') and long-nosed potoroo *Potorous tridactylus* (hereafter 'LNP'). Our study dataset combined experimental and space-for-time approaches through one-off and repeat deployments of 3667 camera-traps across 1232 sites over a period of seven years. In the Glenelg region, foxes had been continuously controlled for 8 - 14 years;  In the Otway region,  we examined the effects of a new fox control program over a 3 year period; both regions also included substantial unbaited areas as experimental controls. Occupancy-detection models [@mackenzie2002estimating] were used to investigate the detectability of each species. As detectability was generally high, we then used Generalised Additive Models [hereafter 'GAMs'; @wood2017generalized] to explore the potentially nonlinear responses of each species to fox control effort (1080 poison-bait density), time since fire (0 - 80 years) across vegetation types, and other environmental drivers (elevation, terrain ruggedness, recent rainfall, topographic wetness and habitat fragmentation).  The GAMs did not account for imperfect detection, but allowed nonlinear responses and more complex model structures. 
+
+\newpage
+
+MATERIALS AND METHODS
+==========================
+
+## Study regions
+We compiled data from multiple camera-trap studies across two regions in south-west Victoria, Australia: the Glenelg region and Otway Ranges (Fig. \@ref(fig:occ-map)). Introduced foxes and cats are the only medium-large functional mammalian terrestrial carnivores here: native dingoes *Canis familiaris* are long-absent throughout, while tiger quolls *Dasyurus maculatus* are long-absent in the Glenelg region and likely functionally extinct in the Otway Ranges (last confirmed sighting in 2014). Managers frequently implement prescribed fire across both regions, primarily to reduce fuel loads. 
+
+### Glenelg region
+In the Glenelg region (38&deg;05'54"S 141&deg;44'41"E), large patches of natural vegetation are fragmented mostly by pastoral farming and residential properties (Fig. \@ref(fig:occ-map)). Here, the primary vegetation communities are heathy woodland, lowland forest, herb-rich woodland and wet heathland [@delwp2020bioregions]. The Glenelg region has an annual mean minimum temperature of 8.1 &deg;C in winter, and 20.0 &deg;C in Summer [@BOM2021]. Mean annual rainfall averages 835 mm [@BOM2021]. Terrain is gently undulating in the Glenelg region; study sites ranged from 12 - 180 m above sea level. 
+
+### Otway Ranges
+The Otway Ranges (38&deg;57'82"S 141&deg;68'41"E) is a largely continuous patch of natural vegetation with a strong east-west rainfall gradient (Fig. \@ref(fig:occ-map)). A matrix of cool temperate rainforest and wet forest at high-altitudes in the south-west descend into a large heathland directly north, and into dry forests and then heathlands to the north-east. Annual rainfall averages 1955 mm in the southwest, dropping to 627 mm in the eastern Otways [@BOM2021]. Mean minimum temperatures in the Otway Ranges are 8&deg; in winter and 13&deg; in summer [@BOM2021]. Our study sites ranged from 23 - 617 m above sea level.
+
+## Fox control and monitoring
+In broad sections of each region, government land managers conduct ongoing targeted lethal fox control for biodiversity conservation. Poison-baits containing 3 mg of sodium mono-fluroacetate ('1080') are buried at a depth of 12 - 15 cm at 1-km intervals along accessible forest tracks and roads. Different road densities result in spatially variable densities of poison-baits. 
+
+### Glenelg region
+In the Glenelg region, three distinct forest blocks have been subject to poison-baiting since October 2005, with fortnightly bait replacements. These forest blocks, along with three similar, unbaited forest blocks to the north are simultaneously surveyed annually under the 'Glenelg Ark' fox control program [40 camera-sites per block; @robley2020glenelg]. Hair-tubes were used to monitor small prey species from 2005 - 2013 [presented in @robley2014long], replaced by camera-traps from 2013 onwards [here we present camera-trap data from 2013 - 2019; @robley2020glenelg]. We also included a further 425 camera-trap deployments at unique locations from early 2018 (M.W.R., PhD surveys). This totals 2041 camera-trap deployments in the Glenelg region, collected in a control-impact experimental design (foxes had been continuously controlled for at 8 - 14 years in the treatment landscapes by the time of these surveys). 
+
+### Otway Ranges
+Fox-baiting commenced in small sections of the Otway Ranges in 2008 and large-scale systematic baiting began in 2016 - 2017 under the 'Otway Ark' program [@robley2019otway]. For the first six weeks of the Otway Ark program, poison-baits were replaced weekly, this then changed to ongoing monthly bait-replacement. There was a pause in baiting for approximately six months during the second half of 2018. Fox control recommenced in late 2018 with four weeks of fortnightly bait-replacement, before returning to monthly bait-replacement. A large section of the Otway Ranges to the north-west remains unbaited, but is monitored as an experimental non-treatment site [@robley2019otway]. Otway Ark managers survey 372 camera-trap sites annually (sequentially across the region); we present one 'before' baiting survey and two 'after' baiting surveys of each site from 2016 - 2018, totalling 1113 camera-trap deployments [@robley2019otway]. We also include data from an additional before-after control-impact surveys (one 'before' baiting survey and two 'after' bating surveys) in the western section of the Otway Ranges, conducted annually 2017 - 2019 (M.W.R PhD surveys). This added a further 195 sites and 513 camera-trap deployments. 
+ 
+### Camera-trap set-ups
+All camera-trap deployments consisted of a Reconyx (Holmen, Wisconsin) brand camera-trap (white or infrared flash), attached to a tree or a metal picket, facing a lure. The Glenelg Ark and Otway Ark fox monitoring programs positioned camera-traps at least 40 cm above ground on a tree or a metal picket, angled downwards toward a lure approximately 1 - 1.5 m away [@robley2020glenelg; @robley2019otway]. The lure consisted of peanut butter, golden syrup and rolled oats mixed into a small ball, placed within a tea strainer or PVC pipe container and secured either to the ground, or 20 - 60 cm above ground on a wooden stake. The M.W.R. PhD surveys across both regions positioned camera-traps lower on a tree (around 15 - 30 cm above the ground) angled only slightly downwards towards a tuna oil lure approximately 2 - 2.5 m away [detailed in @rees2019unexpectedly]. Camera-traps were active for an average of 47 days (maximum 93 days), totalling 172,052 trap-nights. Camera-traps that were active for fewer than ten days were discarded from the dataset.
+
+### Study species
+Foxes and feral cats are both introduced to Australia and share a similar functional niche [@glen2005complex], competing for many of the same prey species [@woinarski2021compounding; @stobo2021reptiles; @stobo2021sharing]. The two threatened prey species, LNPs and SBBs are both solitary, medium-sized, ground-dwelling marsupials. They nest in dense understorey vegetation during the day and turn over large quantities of soil to feed on invertebrates, plant material and fungi at night [@van2008mammals]. 
+ 
+
+## Occupancy-detection models
+We first modelled species occupancy probabilities using occupancy-detection models [@mackenzie2002estimating] implemented in a Bayesian framework using 'stan' [@carpenter2017stan] via the 'ubms' R-package [@ubms]. For each species, we fit a 'stacked' single-season model: repeat surveys were considered as additional sites and pseudoreplication accounted for by using a random-intercept for each unique site. We defined survey occasions as 24-hour periods commencing at midday. We modelled the effect of fox control (categorical: baited or unbaited) on species occupancy and detectability, and included an interaction term with region to account for potentially different responses in the Glenelg and Otway regions. We fit models with four MCMC chains each with 10,000 iterations (including a 5000-iteration warm-up phase). To determine whether species detection probabilities were high enough to permit analysis with generalised additive models (which do not account for imperfect detection), we calculated cumulative detection probabilities for camera-trap survey lengths [@garrard2008when] from one to 93 days (maximum survey duration).
+
+
+## Generalised Additive Models 
+The occupancy-detection models revealed high (> 75%) cumulative detection probabilities for each species across baited and unbaited landscapes for each region, based on our average camera-trap survey effort, except for cats in the Glenelg region (see results for details).  We therefore went on to model species occurrence probabilities using binomial GAMs implemented in the ‘mgcv’ R-package [@wood2017generalized]. The use of GAMS has the advantage of allowing modelling of non-parametric and nonlinear relationships between response (species occurrence) and explanatory variables [particularly important for estimating time since fire responses; @haslem2011habitat] in a computationally efficient framework. 
+
+The response variable in the GAMs was binary occupied-unoccupied for each species for the entire camera-trap deployment. To account for differences in survey duration, we specified a model offset for the log-transformed survey duration (number of days); we also included a random intercept for each unique camera-site to account for repeat sampling. We used the double penalty model selection approach, which penalises model complexity both in terms of the model structure (explanatory variables included) and the shape (wiggliness) of the relationships between the responses and explanatory variables [@marra2011practical]. We used the same model structure for each species, as detailed in the sections below. We assessed model fits (proportion of the null deviance explained, adjusted R-squared value) and predictive performance measures [Akaike Information Criterion score; hereafter 'AIC'; @burnham2004multimodel] against a 'null model' for each species which only had a random intercept for each camera site.  
+
+### 1080 poison-bait density
+Poison-baits are deployed by land managers to suppress foxes with the aim of benefiting native prey.  The degree of fox suppression is likely to be a function of the spatial arrangement of poison baits (i.e., poison-bait density) relative to fox home-range size, as well as the frequency of bait replacement [@fleming1996ground; @benshemesh2020citizen]. In the Otway and Glenelg regions, adult foxes travel an average maximum distance of 2.3 km from their home-range centre [@hradsky2017human]. Therefore, to examine the typical lethal control effort experienced by a fox in these landscapes, we summed the number of poison-bait stations within a 2.3 km radius around each camera-trap deployment. Bait densities ranged from 0 - 19 baits per 16.1 km^2^ circle (2.3 km radius), with a mean value of 10 and eight baits per circle in fox-baited landscapes in the Glenelg region and Otway Ranges, respectively. For an easier comparison to other studies, we converted these values to baits per square kilometre. We modelled a function of 1080 poison-bait density with separate responses per region. Interpretation of these relationships should keep in mind that they are context-specific and do not account for the fact that (i) in wet weather conditions, some poison-bait stations become inaccessible and baits do not get replaced, or (ii) there was  an approximate six month pause in bait replacements in the Otway Ranges in 2018. 
+
+
+### Fire and vegetation type
+We expected species occurrence to (i) differ across vegetation types, (ii) respond to TSF, and (iii) have variable responses to TSF in each vegetation type [as post-fire regeneration occurs at different speeds; @swan2015predicting]. We also expected species to respond to fire frequency, as this can have a strong effect on vegetation structure [@collins2012can]. 
+
+We derived fire frequency (the number of previous fires) and time since last fire (in years) for each camera trap deployment using coarse fire scar mapping provided by government managers, dating back to 1939 when large wildfires burnt both regions extensively. On average, sites for each camera-trap deployment had been burnt 1.5 times since 1939 at the time of camera deployment. The most frequently burnt sites (two deployments at different unique sites) had experienced eight fires; 397 camera-trap deployments (11%) had not burnt since 1939. We identified the Ecological Vegetation Class group [hereafter 'vegetation type'; standard units for vegetation classification in Victoria; @delwp2020bioregions] for each unique camera-trap site, totalling eight vegetation types. We only surveyed 20 unique sites in rainforests, which are interspersed (primarily in low lying gullies) throughout wet and damp forests in the south-eastern Otway Ranges. Given the similarity, fine-scale interspersion of these EVC groups, and that both rarely or never experience fire, we merged them together (hereafter referred to as 'wet forests').
+
+We modelled an interaction between time since fire (in years; hereafter ‘TSF’) and vegetation type by using a hierarchical model structure, which estimated an average TSF response for each species, along with separate responses to TSF in each vegetation type [model ‘GS’ detailed in @pedersen2019hierarchical]. This approach shares information on TSF responses and wiggliness across EVC groups, penalising functions which deviate strongly from the average response that are not substantially supported by the observation data. We initially fit a separate smooth for fire frequency, however, this had high concurvity with TSF (causing a lack of identifiability) and so we removed the fire frequency variable from all models. 
+
+### Elevation, topographic ruggedness and wetness
+Elevation is a strong driver of rainfall, moisture and temperature gradients in both regions, likely indirectly impacting the distribution of the study species through resource availability. High topographic complexity (i.e., 'ruggedness') can limit predator movement and predation rates, thereby benefiting prey [@hohnen2016occupancy; @stobo2020habitat; @mckenzie2007analysis; @mcdonald2017habitat]. Soil moisture (estimated by the topographic wetness index) impacts vegetation, as well as the availability of subterranean invertebrates and fungi - key food sources for LNPs and SBBs [@lobert1990home; @nuske2017redundancy].
+
+We extracted the elevation above sea level (metres) of each site using a 10-m resolution digital elevation model [@delwp2020elevation]. We also used this elevation layer to calculate the median terrain ruggedness index [calculates the difference in elevation between a central cell and eight adjacent cells; @riley1999index], taking the median value in a 30-m radius around each camera-trap site. The topographic wetness index estimates where water will accumulate by accounting for topographic influences on hydrological processes [@beven1979physically]. We also took the median topographic wetness index in a 30-m radius around each camera-trap site, derived from a 30-m resolution layer [@gallant2012topographic]. We modelled the effect of elevation, as well as indices of topographic ruggedness and wetness (both derived from a digital elevation model) on species occurrences. 
+
+### Proximity to forest edge 
+Invasive predators are well-documented to prefer edges between forest and cleared land as they facilitate efficient movement and hunting [e.g., @hradsky2017human; @nichols2019evaluation; @mcgregor2014landscape]. We modelled the effect of the minimum distance from each camera-trap site to the nearest substantial area of non-native vegetation. We calculated this by inverting the extent of native vegetation [@NV2005_EVCBCS] and removing cleared areas smaller than 30 ha, as per @geary2020predators.
+
+### Recent rainfall
+Changes in short-term rainfall dynamics likely impact invasive predator and native prey species [@greenville2014bottom; @wilson2012terrestrial; @paull2013fragmentation; @arthur2012relative]. We therefore calculated the percentage difference in rainfall from the long-term median that had occurred prior to the start of each camera-trap deployment in a six, 12, 18 and 24 month period. We used rainfall data from the nearest weather station [n = 11; @BOM2021] for each camera-trap. We modelled rainfall effects separately for each region. To identify the most appropriate rainfall window (six – 24 months) for each species, we fit a separate model (including all other explanatory variables listed above) using each rainfall window and selected the top-ranked model using AIC scores. 
+
+All analyses were conducted in R version 3.6.3 [@R].
+
+
+\newpage
+
+```{r occ-map, fig.cap = "Locations of our study regions in south-west Victoria, Australia. The grids of camera-traps are denoted by white dots. The Glenelg region is to the west and Otway region to the east. Native vegetation is indicated by dark green, with hill shading. \\textit{Map tiles by Stamen Design, under CC BY 3.0, map data by OpenStreetMap, under CC BY SA.}"}
+knitr::include_graphics("../figs/map_cams.png")
+```
+
+\newpage
+
+RESULTS
+============
+
+## Red fox
+Foxes were detected on 1453 of the 3667 camera-traps surveys (39.6%; Table \@ref(tab:occ-naive)).
+
+### Occupancy-detection models
+Fox detectability in unbaited landscapes was high, particularly in the Glenelg region (Fig. \@ref(fig:occ-det)a) where 95% detection probability was reached after a 30 day survey duration (relative to 64 days in the Otway Ranges; Fig. \@ref(fig:occ-cumdet)). Fox control reduced fox detectability across both regions. Nonetheless, foxes in baited landscapes still had a high detection probability for the average survey duration (47 days): 76% in the Glenelg region and 81% in the Otway Ranges (Fig. \@ref(fig:occ-cumdet)). 
+
+The occupancy-detection model estimated fox occupancy to be lower at sites in baited landscapes than unbaited landscapes; this effect was more than twice as strong in the Glenelg region than the Otway Ranges (Fig. \@ref(fig:occ-det)b). For example, in heathy woodlands of the Glenelg region, fox occupancy probability was approximately three times lower in baited landscapes (0.19; 95% CI 0.13 - 0.26) relative to unbaited landscapes (0.56; 95% CI: 0.47 - 0.66). Whereas in the heathy woodlands of the Otway Ranges, fox occupancy was already low without fox control (0.33; 95% CI: 0.25 - 0.43) and was approximately 1.4 times lower following fox control (0.24; 95% CI 0.17 - 0.33). Foxes were ubiquitous across the study regions, but the probability of occupancy was nearly twice as high in dry forests, herb-rich woodlands and lowland forests than heathlands, heathy woodlands and wet forests (Fig. \@ref(fig:occ-det)c). 
+
+### Generalised additive models
+The GAM showed that fox-bait density in the Glenelg region was the strongest driver of fox occurrence. Fox occurrence in the Glenelg region declined from a probability of 0.68 (95% CI: 0.58 - 0.76) where fox-bait density was zero, to 0.04 (95% CI: 0.02 - 0.11) where fox-bait density was highest (1.14 baits km^-2^; Fig. \@ref(fig:gams-occ-fox)a). The effect of fox-bait density on foxes in the Glenelg region was nonlinear: there was little difference in fox occurrence across the range of 0.4 to 0.8 baits km^-2^, but a greater suppression was achieved at higher bait densities (Fig. \@ref(fig:gams-occ-fox)a). Fox occurrence also declined with fox-bait density in the Otway Ranges, but this effect was linear, weaker and had higher uncertainty (Fig. \@ref(fig:gams-occ-fox)a). In the Otway Ranges, fox occurrence declined from a probability of 0.4 (95% CI: 0.32 - 0.48) where fox-bait density was zero, to 0.14 (95% CI: 0.05 - 0.35) where fox-bait density was highest (1.1 baits km^-2^; Fig. \@ref(fig:gams-occ-fox)a).
+
+There was no average TSF response on fox occurrence, however, fox occurrence declined linearly with TSF in dry forests and increased linearly with TSF in heathland, although there was considerable uncertainty in these estimates (Fig. \@ref(fig:gams-occ-fox)g:h). 
+
+Fox occurrence declined linearly with increasing terrain ruggedness, and with distance to non-native vegetation for distances up to approximately 1.5 - 2 km (Fig. \@ref(fig:gams-occ-fox)d;f). Elevation had a nonlinear and uncertain effect on fox occurrence, which was estimated to peak around 450 m above sea level (Fig. \@ref(fig:gams-occ-fox)c). The effect of topographic wetness on fox occurrence was removed from the model (Fig. \@ref(fig:gams-occ-fox)e). The fox GAM that considered rainfall deviations in the previous 6 months was ranked highest relative to models with 18- (by only 1.4 AIC units), 12-, and 24-month periods (by at least 6.4 AIC units; Table. \@ref(tab:occ-rain-aic); however, this effect was weak with relatively high uncertainty (Fig. \@ref(fig:gams-occ-fox)c). 
+
+The top-ranked fox GAM had an adjusted R-square value of 0.27 and explained 26% of the null deviance. Relative to the null model (with only a site random intercept), the explanatory variables improved predictive performance considerably (242 AIC units lower), but slightly worsened the model fit (Table. \@ref(tab:occ-model-sumstats)).
+  
+  
+## Feral cat
+Cats were detected on 1010 camera-trap deployments (27.6%; Table \@ref(tab:occ-naive)). 
+
+### Occupancy-detection models
+Cats were relatively poorly detected in the Glenelg region, where they had a 59% detection probability given presence for the average survey duration, compared to 83% in the Otway Ranges; Fig. \@ref(fig:occ-cumdet)). There was no detectability difference between fox control treatment landscapes in the Glenelg region, however, cat detectability was slightly higher with fox control in the Otway Ranges (Fig. \@ref(fig:occ-det)a). 
+
+The occupancy-detection models estimated that cat occupancy in the Glenelg region was higher in landscapes with fox control (e.g., 0.25 in heathy woodlands; 95% CI: 0.16 - 0.35 in heathy woodlands) relative to those without fox control (0.12 in heathy woodlands; 95% CI: 0.07 - 0.19); but there was no association with baiting in the Otway Ranges (Fig. \@ref(fig:occ-det)b). Cat occupancy was most strongly driven by vegetation type: highest in the wet forest, followed by heathland, swampy scrub, herb-rich woodland and dry forest, but very low in lowland forest and heathy woodland (Fig. \@ref(fig:occ-det)c). 
+
+### Generalised additive models
+The cat GAM showed no effect of fox-bait density, elevation or topographic wetness on cat occurrence (Fig. \@ref(fig:gams-occ-cat)a;c;e). Cats responded to TSF differently across each vegetation type, with the average TSF response removed from the model (Fig. \@ref(fig:gams-occ-cat)g:h). Cat occurrence probability increased with terrain ruggedness, and declined with distance from the nearest area of non-native vegetation, although uncertainty was high (Fig. \@ref(fig:gams-occ-cat)d;f). The different rainfall deviation windows were were indistinguishable based on AIC scores; but in all cases except 6 months, the rainfall variable was removed from the model. The model that considered rainfall deviations in the previous six months was marginally top-ranked (by 0.7 AIC units) and estimated that cat occurrence slightly increased as rainfall increased (relative to the long-term average; Fig. \@ref(fig:gams-occ-cat)c). 
+
+The top-ranked cat GAM had an adjusted R-square value of 0.24 and explained 24% of the null deviance. Relative to the null model, the explanatory variables improved predictive performance considerably (168 AIC units lower), but only slightly improved the model fit (less than 1% increase in null deviance explained and 0.02 for the R-squared value; Table. \@ref(tab:occ-model-sumstats)).
+ 
+## Southern brown bandicoot
+We detected SBBs on 394 of the 3667 camera-traps (10.7%; Table \@ref(tab:occ-naive)). 
+
+#### Occupancy-detection models
+SBBs were highly detectable, with a greater than 95% detection probability reached after 31 and 43 days in the Glenelg and Otway Ranges, respectively (Fig. \@ref(fig:occ-cumdet)). Baiting was associated with a decrease in SBB detectability in Glenelg but an increase in detectability in the Otways (Fig. \@ref(fig:occ-det)a). 
+
+There was no discernible effect of fox control on SBB occupancy in either region (Fig. \@ref(fig:occ-det)b). SBB's were most likely to occupy heathy woodlands (Fig. \@ref(fig:occ-det)c) and they were largely absent from the wet forests (Table \@ref(tab:occ-naive)). The few SBB detections in wet forest occurred at sites adjacent to other vegetation types (SBBs are largely replaced by long-nosed bandicoots *Perameles nasuta* in wet forest; M. Rees, unpublished data). 
+
+### Generalised additive models
+SBB occurrence probability was very low. There was some indication SBB occurrence slightly increased with fox-bait density in the Glenelg region, peaking at around 150 m above sea level and 2 km from the nearest forest edge and declined with increasing terrain ruggedness and TSF; however, these explanatory variables had high uncertainty relative to the strength of the effects (Fig. \@ref(fig:gams-occ-sbb)). There was no evidence that rainfall affected SBB occurrence – the top-ranked models in terms of AIC scores (Table. \@ref(tab:occ-rain-aic)) had the effects of rainfall completely removed. 
+
+The top-ranked SBB GAMs had an adjusted R-square value of 0.31 and explained 41% of the null deviance. Relative to the null model, the explanatory variables improved predictive performance considerably (211 AIC units lower) and slightly improved the model fit by 4% of null deviance explained and 0.05 for the R-squared value (Table. \@ref(tab:occ-model-sumstats)). 
+
+
+## Long-nosed potoroo
+We detected LNPs on 331 camera-trap deployments (9%; Table \@ref(tab:occ-naive)). 
+
+### Occupancy-detection models
+LNPs were the most detectable of our study species, reaching a 95% detection probability with a 33 and 18 day survey duration in the unbaited landscapes of the Glenelg and Otway regions, respectively (Fig. \@ref(fig:occ-cumdet)). In the Glenelg region, LNP detectability was twice as high in landscapes with fox control relative to those without (Fig. \@ref(fig:occ-det)a). Occupancy of LNPs was highest in heathlands (Fig. \@ref(fig:occ-det)c).
+
+### Generalised additive models
+The GAM showed that LNP occupancy improved from a 0.05 probability (95% CI: 0.02 - 0.11) to 0.33 (95% CI: 0.16 - 0.55) across the fox-bait density gradient in the Glenelg region (Fig. \@ref(fig:gams-occ-lnp)a). In contrast, LNP occupancy showed no relationship with poison-bait density in the Otway region (Fig. \@ref(fig:gams-occ-lnp)a). LNP occurrence probability increased linearly with elevation (Fig. \@ref(fig:gams-occ-lnp)c) and peaked in the mid-range of topographic wetness (Fig. \@ref(fig:gams-occ-lnp)e). LNP occurrence was low initially after fire, but peaked around 20 years and remained steady in the years afterwards, although there was considerably uncertainty (Fig. \@ref(fig:gams-occ-lnp)e). There were no discernible differences in LNP responses to TSF across the vegetation types (Fig. \@ref(fig:gams-occ-lnp)f). The rainfall term was removed for the top-ranked model (at least 3.5 AIC units higher than models that included it). 
+
+The top-ranked model had an adjusted R-square value of 0.47 and explained 53% of the null deviance. Relative to the null model, the explanatory variables improved predictive performance (94 AIC units lower) and slightly improved the model fit by 3% of null deviance explained and 0.02 for the R-squared value (Table. \@ref(tab:occ-model-sumstats)).
+ 
+
+
+\newpage
+
+```{r occ-det, fig.cap="Outputs from Bayesian occupancy-detection for each study species. Daily detection probabilities (a) and occupancy estimates (b) in landscapes with fox control (red) and without fox control (blue) in the Glenelg region and Otway Ranges, south-west Victoria, Australia (with Heathy Woodlands as a reference level). Fox control had occurred in The Glenelg region for 8 - 13 years and was monitored with a control-impact design. The Otway Ranges was monitored using a before-after-control-impact experimental design; surveyed approximately 1 year prior and 2 years following the commencement of fox-baiting. Occupancy was also modelled as a function of vegetation type (Ecological Vegetation Class groups; c). Error bars represent 95\\% Bayesian credible intervals."}
+knitr::include_graphics("../figs/occ_det_fox_control.png")
+```
+
+\newpage
+
+```{r gams-occ-fox, fig.cap="Generalised additive model estimates of the effect of each explanatory variable (columns) on red fox \\textit{Vulpes vulpes} occurrence. Shaded bands indicate 95\\% confidence intervals."}
+knitr::include_graphics("../figs/gams_fox.png")
+```
+
+
+\newpage
+
+
+```{r gams-occ-cat, fig.cap="Generalised additive model estimates of the effect of each explanatory variable (columns) on feral cat \\textit{Felis catus} occurrence. Shaded bands indicate 95\\% confidence intervals."}
+knitr::include_graphics("../figs/gams_cat.png")
+```
+
+\newpage
+
+
+```{r gams-occ-sbb, fig.cap="Generalised additive model estimates of the effect of each explanatory variable (columns) on southern brown bandicoot \\textit{Isoodon obesulus} occurrence. Shaded bands indicate 95\\% confidence intervals."}
+knitr::include_graphics("../figs/gams_sbb.png")
+```
+
+\newpage
+
+
+```{r gams-occ-lnp, fig.cap="Generalised additive model estimates of the effect of each explanatory variable (columns) on long-nosed potoroo \\textit{Potorous tridactylus} occurrence. Shaded bands indicate 95\\% confidence intervals."}
+knitr::include_graphics("../figs/gams_lnp.png")
+```
+
+
+\newpage
+
+
+DISCUSSION
+===================
+
+
+Here we found that consistent and long-term lethal control can reduce a widespread invasive apex predator (fox) to a near-zero occurrence probability--and importantly--increase the occurrence probability of a threatened prey species (LNP) by more than 6-fold (Fig. \@ref(fig:gams-occ-fox)a; Fig. \@ref(fig:gams-occ-lnp)a). However, prey responses to predator suppression are not universal [@hunter2018not; @duncan2020eruptive; @salo2010predator]. Despite signs of improvement in the early stages of the Glenelg Ark fox baiting program [@robley2014long], we found little evidence that SBB occupancy increased with fox control in either region (Fig. \@ref(fig:occ-det)b; Fig. \@ref(fig:gams-occ-lnp)a). This may have been because feral cat occupancy was twice as high in the landscapes with fox control relative to those without in the Glenelg region (Fig. \@ref(fig:occ-det)b), potentially signalling mesopredator release. In the Otway region (where fox control recently commenced and baiting was less frequent), foxes were suppressed to a lesser extent and neither threatened prey species showed signs of improvement (Fig. \@ref(fig:occ-det)b; Fig. \@ref(fig:gams-occ-fox)a; Fig. \@ref(fig:gams-occ-sbb)a; Fig. \@ref(fig:gams-occ-lnp)a). Our study demonstrates that lethal invasive predator control can be a highly effective conservation strategy, but only for some species and when sustained continuously over the long-term.
+
+The Glenelg Ark program has continuously controlled foxes across approximately 100 000 ha of public land since 2005 [@robley2014long] and is one of the few fox control programs in Australia to demonstrate a sustained reduction in fox occupancy [see also @stobo2020management]. A reduction in fox occupancy is a strong sign of management effectiveness because it means prey are less exposed to the threat of predation. Our study provides empirical evidence that the effectiveness of fox control from poison-baiting programs depends on the density of poison-baits deployed (Fig. \@ref(fig:gams-occ-fox)a). This has only previously been inferred by comparing fox baiting programs across different regions (where fox ecology, environmental conditions and study designs differ). The densities of poison-baits in our study regions (maximum 1.14 baits km^-2^) were far below the recommended 5 - 10 baits km^-2^ [mostly derived from studies in arid and semi-arid regions; @saunders2007improving], but nonetheless effective at fox suppression in the Glenelg region (Fig. \@ref(fig:occ-det)b). Increasing bait density up to 0.3 baits km^-2^ was particularly effective at controlling foxes in the Glenelg region, reducing fox occurrence by up to four-fold compared to unbaited regions; afterwards, increasing poison-bait densities continued to suppress foxes, but with a weaker effect (Fig. \@ref(fig:gams-occ-fox)a). Increased bait caching at high bait densities may explain why fox suppression tapered off, which is likely to result in a sublethal dose when eventually consumed and potential bait aversion [@saunders2007improving]. Nonetheless, benefits to threatened native prey is the best metric of fox control effectiveness. The probability of LNP occurrence increased linearly with poison-bait density in the Glenelg region (Fig. \@ref(fig:gams-occ-lnp)a), confirming that high fox control effort leads to improved conservation outcomes.
+
+We slightly underestimated the effect of bait density across both regions because the models assumed all bait-stations were constantly active, despite some bait-replacements being missed due to accessibility issues following wet weather events or because of more pressing management concerns (namely wildfire). We more strongly underestimated the effect of bait density in the Otway Ranges because we also did not account for a near six-month pause in bait replacement in 2018. We also expect fox-baits to be less effective in the Otway Ranges than the Glenelg region due to the higher rainfall which more quickly degrades the poison [@gentle2007persistence; @saunders2000degradation]. Nonetheless, fox occupancy in the Otway Ranges was still negatively associated with fox-bait density (Fig. \@ref(fig:gams-occ-fox)a), suggesting that intensified and sustained fox control is likely to be effective in that region. Future research will benefit from accounting for the role of environmental conditions and prey availability on baiting effectiveness [@carter2013fox; @saunders2007improving], as well as interference with baits by non-target species [@glen2003monitoring; @fairbridge2000observations; @marlow2015lethal].
+
+Evidence that fox control caused mesopredator release of feral cats in terms of detectability and occupancy was mixed. Cat occupancy was higher in sites with fox control in the Glenelg region and cat detectability increased with fox control in the Otway Ranges (Fig. \@ref(fig:occ-det)a:b). However, cat occurrence did not change across gradients of poison-bait density in either region (GAM; Fig. \@ref(fig:gams-occ-cat)a). Cat detectability in the Glenelg region was very low (Fig. \@ref(fig:occ-det)a), and so the model assumption of perfect detection in the cat GAM was likely problematic. This result could also signal that cats respond to fox suppression at the landscape level rather than at finer spatial scales. In addition, potential changes in population density and behaviour following mesopredator release [@brashares2010ecological], such as cats reducing their ranging behaviour following fox control [as found by @molsher2017mesopredator], could skew inference around occupancy estimates [@efford2012occupancy; @broadley2019density; @stewart2018species; @neilson2018animal; @mccarthy2013influence]. Cats had weak associations with most explanatory variables, the poorest detection rates and worst model fits of our study species, further highlighting the challenges of monitoring this elusive, generalist predator [@fisher2015cat; @stokeld2015multiple; @algar2020feral].
+
+In the Glenelg region, LNP--but not SBB--occupancy improved with fox control (Fig. \@ref(fig:occ-det)b). Using increases in prey occupancy to measure the effectiveness of predator control rests on the assumption that there is suitable habitat for prey to expand into. While SBBs had a narrower distribution relative to LNPs across our study regions (largely absent from the wet forests), there were 34 heathy woodland sites in the Glenelg region where they were never observed (from 196 camera-trap deployments), suggesting there may have been suitable habitat for them to colonise. However, EVGs such as “heathy woodland” are a coarse, model-generated categories; there may have been an environmental variable which precluded SBB presence at these 34 sites, such as local habitat structure [@swan2015predicting], although @smith2013fire found no association between habitat structure and SBB occupancy in the 240 Glenelg Ark monitoring sites. Alternatively, the different prey responses in our study could reflect the relative vulnerability of these species to fox and cat predation: LNPs (and other small macropods) appear more strongly limited by fox predation, whereas SBBs tend to be more closely associated with cat populations [@hunter2018not; @arthur2012relative] and so may have experienced negative consequences from higher cat occupancy in Glenelg landscapes with fox control. This would also help explain why SBB occupancy was highest in heathy woodlands, where cat occupancy was lowest (Fig. \@ref(fig:occ-det)c). Formally testing whether invasive predator occupancy impacts the probability of prey occupancy using multispecies models [@rota2016multispecies] is a priority for future research. 
+
+In the Otway Ranges, fox control did not improve SBB or LNP occupancy (Fig. \@ref(fig:occ-det)b; Fig. \@ref(fig:gams-occ-sbb)a); Fig. \@ref(fig:gams-occ-lnp)a). This is unsurprising given fox suppression in the Otway Ranges was weak, likely because fox control had only recently commenced and bait replacement was relatively inconsistent. Despite the high fecundity of these prey species, two years was may have been insufficient time to measure an effect of fox control on prey occupancy. Additionally, we averaged fox control effects over a 0 - 2 year post-baiting time period in the Otway Ranges; although, our findings concur with those of @robley2019otway, who estimated annual occupancy probabilities using a more traditional BACI analysis with a subset of this data. The ongoing broadscale monitoring of the Otway Ark fox control program and other local initiatives will shed light on occupancy trends over time.
+
+Fire can have long-term impacts on the occurrence of small-medium sized native mammals [@monamy2000small; @claridge2000factors; @arthur2012relative]. Previously, @smith2013fire found extinction probabilities for both LNPs and SBBs to be high for up to 18 months post-fire. Here we found that, LNP occurrence was low immediately post-fire and peaked 20 years post-fire (Fig. \@ref(fig:gams-occ-lnp)g). However, seemingly contrary to @smith2013fire, SBB occurrence declined with increasing TSF (Fig. \@ref(fig:gams-occ-sbb)g). Given the uncertainty around our estimates and importance for managers implementing prescribed fire, further research is required to clarify and understand the mechanisms behind these responses to fire. A key remaining question is whether fox control impacts these species’ responses to fire in the short and long-term. 
+
+While there is now considerable research which has demonstrated that invasive predator impacts are heightened in recently burnt areas [@hradsky2017human; @hradsky2017responses; @mcgregor2014landscape; @leahy2016amplified; @green2006immediate; @meek2000home; @mcgregor2016extraterritorial], we have a comparatively poor understanding of how long-term fire patterns impact invasive predators [reviewed in @hradsky2020conserving]. Similar to many previous studies, we found no average response to TSF for foxes or cats, however, both predators had varying responses to TSF across vegetation types (Fig. \@ref(fig:gams-occ-fox)g:h; Fig. \@ref(fig:gams-occ-cat)g:h;). This supports the 'dynamic vegetation' hypothesis [@nimmo2014why]; the first evidence of this kind for predators (albiet uncertainty around these relationships was high). Studies often merge similar vegetation types due to some groups having small sample sizes, however, we found no clear way of grouping vegetation types that was relevant to multiple species. Our hierarchical specification of the TSF and vegetation type interaction was powerful in this regard as it allowed separate responses for each vegetation type, while sharing information across vegetation types, and provided confidence that there was data to back-up differently shaped responses given the penalisation to the average response [@pedersen2019hierarchical]. 
+
+Accounting for other drivers of species in models that estimate responses to management is critical, but not often undertaken. For example, unexpected declines and local extinctions of small-medium sized mammals have occurred following 40 years of fox control in south-west Western Australia are posited to be the result of a mesopredator release of cats; @wayne2017recoveries], but the Intergovernmental Panel on Climate Change has identified this region as a 'drying hotspot' [@drying2021kala] and there also are strong concerns around the intensity of prescribed fire operations [e.g., @bennett2021prescribed], offering alternative or contributing explanations for prey declines. Mammal communities have also collapsed following long-term fox-control in Booderee National Park [@lindenmayer2018conservation], but a severe wildlife burnt through approximately half the region in the same year fox control commenced [leaving greater than 73% of park burnt within the last decade; @foster2017effects]. Similarly, recent fire events have been skewed towards the baited landscapes of the Glenelg region since fox control began, with the majority of long-unburnt vegetation occurring in unbaited landscapes (Fig. \@ref(fig:veg-tsf-violin)). We were partially able to compensate for this confounding by including an additional 424 sites in the Glenelg region, as well as the Otway Ranges datasets--providing a wider range of fire history patterns in each vegetation type with and without fox control (Fig. \@ref(fig:veg-tsf-violin)). Our study demonstrates the value of bringing together multiple smaller datasets to compare management effectiveness. 
+
+Occurrence models are powerful tools to predict species distributions but less useful for explaining fine-scale site-use for wide-ranging, generalist species in continuous habitat [@guillera2015my; @efford2012occupancy]. Despite our large dataset, uncertainty for most explanatory variables was high and their inclusion offered little improvement to GAM fits relative to null models (in fact, slightly worsened the model fit for foxes; Table. \@ref(tab:occ-model-sumstats)). Our study offers little additional clarity about the 'natural' drivers of occurrence for invasive predators and medium-sized mammalian prey within their distributions other than clarifying the importance of broad vegetation type. While we did seek to provide inference on what drives the patchy distributions of these species, our key aim was to account for confounding variables while testing fox control effects. Nevertheless, testing the predictive performance of distribution models for these species with independent datasets, in particular whether region-specific or across-region models predict more accurately, will aid the management of these species.  
+
+Fox control is a major expenditure of Australian conservation and agricultural programs [approximately AUD 16 million annually; @mcleod2004counting]. It is critical to ensure cost-effectiveness from both a monetary and ethical standpoint. Here we demonstrate clearly that effectiveness in terms of fox suppression is a function of control effort. However, the  evidence for benefits to native prey species was mixed. Prey may not benefit from predator control if it leads to mesopredator release of other invasive predators, or if prey are constrained by other factors such as lack of suitable habitat. Species vulnerable to fox predation are also sensitive to fire-induced changes in habitat structure [@woinarski2015ongoing], and so integrating conservation strategies that consider habitat and invasive predator management in concert is a future priority. Our work highlights the importance of fine-scale monitoring, considering multiple drivers and tailoring conservation strategies to local contexts.
+
+
+\newpage
+
+ACKNOWLEDGEMENTS {-}
+===================
+
+
+
+
+\newpage
+
+REFERENCES {#references .unnumbered}
+==========
+
+<div id="refs"></div>
+
+
+\newpage
+
+\beginsupplement
+
+# Supporting Information {-}
+
+\newpage
+
+$~$
+
+$~$
+
+$~$
+
+
+```{r occ-naive}
+library(dplyr)
+library(kableExtra)
+
+## DATA PREPARATION
+records <- read.csv("/Users/mrees2/Dropbox/personal/matt/github/phd-thesis/index/data/occ/records_presence_absence.csv")
+# drop zoi's records - too much spatial autocorrelation
+records <- filter(records, data_source != "zoi")
+# exclude stations left out for less than 14 days
+records <- filter(records, survey_duration >= 10)
+# as we only had three "Riverine Grassy Woodlands or Forests" unique survey sites --> drop em
+records <- filter(records, XGROUPNAME != "Riverine Grassy Woodlands or Forests")
+# as we only had 20 "Rainforests" unique survey sites, all of which interspersed in "Wet Forests" in the Otways, reclassify as "Wet Forests". 
+records$XGROUPNAME <- if_else(records$XGROUPNAME == "Rainforests", "Wet or Damp Forests", as.character(records$XGROUPNAME))
+# abbreviate EVC group names for plotting
+records$XGROUPNAME <- if_else(records$XGROUPNAME == "Wet or Damp Forests", "Wet Forests", records$XGROUPNAME)
+records$XGROUPNAME <- if_else(records$XGROUPNAME == "Riparian Scrubs or Swampy Scrubs and Woodlands", "Swampy Scrubs", records$XGROUPNAME)
+records$XGROUPNAME <- substr(records$XGROUPNAME, 1, nchar(records$XGROUPNAME) - 1)
+
+# SUMMARIES
+table1 <- records %>%
+  group_by(region, XGROUPNAME) %>%
+  mutate(sites = length(unique(station)),
+         deployments = length(unique(station_year)),
+         fox_present = sum(fox),
+         cat_present = sum(cat),
+         sbb_present = sum(bandicoot_sb),
+         lnp_present = sum(potoroo_ln),
+         fox_naive = (fox_present / deployments),
+         cat_naive = (cat_present / deployments),
+         sbb_naive = (sbb_present / deployments),
+         lnp_naive = (lnp_present / deployments)
+         )
+table1 <- table1 %>%
+  dplyr::select(XGROUPNAME, region, sites, deployments, fox_naive, cat_naive, sbb_naive, lnp_naive)  %>% 
+  distinct() %>%
+  arrange(XGROUPNAME, region)
+# rename region 
+table1$region <- factor(table1$region)
+levels(table1$region) <- c("Glenelg", "Otway")
+
+# remove repeat vegetation name
+table1[c(2, 4, 6, 8, 10, 12),1] <- ""
+
+# make table
+kbl(table1, longtable = T, booktabs = T, digits = 2,
+    caption = "Number of camera-trap sites, total deployments and naive occupancy rates for red foxes, feral cats, southern brown bandicoots (SBB) and long-nosed potoroos (LNP) within Ecological Vegetation Class groups across two broad regions in south-west Victoria, Australia.",
+     col.names = c("Vegetation", "Region", "Sites", "Deployments", "Fox", "Cat", "SBB", "LNP")) %>% 
+   kable_styling(font_size = 10)
+```
+
+\newpage
+
+
+```{r veg-tsf-violin, fig.cap="Range and distribution of time since fire values across the surveyed vegetation types in baited and unbaited sites. In the Glenelg Ark camera-trapping dataset, where most sites in the baited landscapes are relatively recently burnt, and most sites are long-unburnt in the unbaited landscapes. Combining M.W.R PhD and Otway Ark surveys provides a wider range of fire history patterns in each vegetation type with and without fox control."}
+knitr::include_graphics("../figs/raw_data_tsf_veg.png")
+```
+
+
+\newpage
+
+
+```{r occ-cumdet, fig.cap="Cumulative detection probabilities of species in landscapes with fox control (red) and without fox control (blue) in the Glenelg region (a) and Otway Ranges, south-west Victoria, Australia. Fox control had occurred in The Glenelg region for 8 - 13 years and was monitored with a control-impact design. The Otway Ranges was monitored using a before-after-control-impact experimental design; surveyed approximately 1 year prior and 2 years following the commencement of fox-baiting. Vertical grey lines represent mean (solid) as well as 25\\% and 75\\% quantiles (dotted) of days camera-traps were active for. Shaded bands represent 95\\% Bayesian credible intervals. Estimates derived from Bayesian occupancy-detection models."}
+knitr::include_graphics("../figs/detectability.png")
+```
+
+\newpage
+
+
+```{r occ-rain-aic}
+
+df <- read_csv("/Users/mrees2/Dropbox/personal/matt/github/phd-thesis/index/data/occ/rain_occ_aic_table.csv") %>%
+  dplyr::select(-c(X1, df)) %>% 
+  arrange(match(species, c( "fox", "cat", "SBB", "LNP")), desc(species))
+# rename
+df$species <- c(rep("Red fox",4), rep("Feral cat",4), rep("Southern brown bandicoot",4), rep("Long-nosed potoroo",4))
+
+# make table
+kbl(df, longtable = T, booktabs = T, digits = 2, 
+    caption = "Akaike's Information Criterion values for generalised additive models with different rainfall periods.",
+     col.names = c("Species", "Months", "AIC", "dAIC"))  %>% 
+   kable_styling(font_size = 10) %>% 
+  footnote(general = c("AIC - Akaike's Information Criterion score",
+                     "dAIC - difference between AIC of this model and the model with smallest AIC"))
+
+```
+
+
+\newpage
+
+```{r occ-model-sumstats}
+
+df <- read_csv("../derived_data/model_summaries.csv") %>%
+  dplyr::select(-c(X1)) 
+# rename
+df$species <- c(rep("Red fox",2), rep("Feral cat",2), rep("Southern brown bandicoot",2), rep("Long-nosed potoroo",2))
+
+# make table
+kbl(df, longtable = T, booktabs = T, digits = 2, 
+    caption = "Generalised additive model summary statistics for models with 'full' set of explanatory variables relative to a 'null model' with only a site random effect.",
+     col.names = c("Species", "Model", "EDF", "dev.expl", "r.sq", "AIC"))  %>% 
+   kable_styling(font_size = 10) %>% 
+  footnote(general = c("EDF - estimated degrees of freedom of all model terms.",
+                       "dev.expl - proportion of the null deviance explained by the model. ",
+                       "r.sq -  adjusted r-squared value.",
+                      "AIC - Akaike's Information Criterion score"))
+
+```
+
+\newpage
+
+```{r occ-tsf, fig.cap="Time since fire had a weak impact on fox (a) and feral cat (b) occupancy probability in south-west Victoria, Australia. Southern brown bandicoot occupancy probability (c) peaked around 15 and 75 years following fire, although, the magnitude of both peaks differed across Ecological Vegetation Class groups. Long-nosed potoroo occupancy probability (d) linearly increased with time since fire in heathy vegetation groups, but linearly decreased with years post-fire in Herb-Rich Woodlands. Estimates derived from generalised additive models (assuming perfect detection). Shaded regions indicate 95\\% confidence intervals. Rug ticks representing the distribution of time since fire data for the Glenelg region (brown) is shown on the inside of the top axis, Otway Ranges distribution shown on the inside of the bottom axis (navy)."}
+knitr::include_graphics("../figs/tsf.png")
+```
